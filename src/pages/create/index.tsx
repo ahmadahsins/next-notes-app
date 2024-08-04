@@ -18,7 +18,7 @@ import { useRouter } from "next/router";
 
 const schema = z.object({
     title: z.string().min(1, "Title is required").max(100, "Title is too long"),
-    note: z.string().min(1, "Note is required").max(1000, "Note is too long"),
+    note: z.string().min(1, "Note is required"),
 });
 
 const CreatePage = () => {

@@ -121,7 +121,12 @@ const LoginPage = () => {
                                     "Sign In"
                                 )}
                             </Button>
-                            <Button variant="secondary" className="w-full">
+                            <Button onClick={() =>
+                                signIn("google", {
+                                    callbackUrl,
+                                    redirect: false,
+                                })
+                            } variant="secondary" className="w-full">
                                 Login with Google
                             </Button>
                             <div className="text-center text-sm">

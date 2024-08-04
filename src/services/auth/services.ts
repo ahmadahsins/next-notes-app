@@ -8,6 +8,8 @@ export async function signUp(
         password: string;
         notes?: any[];
         archivedNotes?: any[];
+        created_at?: Date;
+        updated_at?: Date;
     },
     callback: Function
 ) {
@@ -18,6 +20,8 @@ export async function signUp(
         userData.password = await bcrypt.hash(userData.password, 10);
         userData.notes = [];
         userData.archivedNotes = [];
+        userData.created_at = new Date();
+        userData.updated_at = new Date();
         await addData("users", userData, (result: boolean) => {
             callback(result);
         });
@@ -31,5 +35,25 @@ export async function signIn(email: string) {
         return data[0];
     } else {
         return null;
+    }
+}
+
+export async function loginWithGoogle(data: any, callback: Function) {
+    const user = await retrieveDataByField("users", "email", data.email);
+
+    if (user.length > 0) {
+        callback(user[0]);
+    } else {
+        data.notes = [];
+        data.archivedNotes = [];
+        data.created_at = new Date();
+        data.updated_at = new Date();
+        data.password = "";
+        await addData("users", data, (status: boolean, res: any) => {
+            data.id = res.path.replace("users/", "");
+            if (status) {
+                callback(data);
+            }
+        });
     }
 }

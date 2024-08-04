@@ -1,8 +1,9 @@
-import { signIn } from "@/services/auth/services";
+import { loginWithGoogle, signIn } from "@/services/auth/services";
 import { compare } from "bcrypt";
 import NextAuth from "next-auth/next";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import jwt from "jsonwebtoken";
 
 export const authOptions: NextAuthOptions = {
@@ -39,6 +40,10 @@ export const authOptions: NextAuthOptions = {
                 }
             },
         }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_OAUTH_CLIENT_ID || "",
+            clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET || "",
+        }),
     ],
     callbacks: {
         async jwt({ token, account, user }) {
@@ -46,6 +51,20 @@ export const authOptions: NextAuthOptions = {
                 token.email = user.email;
                 token.name = user.name;
                 token.id = user.id;
+            }
+
+            if (account?.provider === "google") {
+                const data = {
+                    name: user.name,
+                    email: user.email,
+                    type: "google",
+                };
+
+                await loginWithGoogle(data, (data: any) => {
+                    token.email = data.email;
+                    token.name = data.name;
+                    token.id = data.id;
+                });
             }
 
             return token;
@@ -62,7 +81,11 @@ export const authOptions: NextAuthOptions = {
                 session.user.id = token.id;
             }
 
-            const accessToken = jwt.sign(token, process.env.NEXTAUTH_SECRET || "", { algorithm: "HS256" });
+            const accessToken = jwt.sign(
+                token,
+                process.env.NEXTAUTH_SECRET || "",
+                { algorithm: "HS256" }
+            );
             session.accessToken = accessToken;
 
             return session;
