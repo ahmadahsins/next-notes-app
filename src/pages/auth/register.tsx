@@ -56,7 +56,7 @@ const RegisterPage = () => {
     });
 
     return (
-        <div className="flex min-h-screen items-center justify-center">
+        <div className="flex min-h-screen items-center justify-center mx-5">
             <Form {...form}>
                 <form onSubmit={onSubmit} className="w-full max-w-lg">
                     <Card className="w-full">
@@ -128,10 +128,7 @@ const RegisterPage = () => {
                             </Button>
                             <div className="text-center text-sm">
                                 Already have an account?{" "}
-                                <Link
-                                    href="/auth/register"
-                                    className="underline"
-                                >
+                                <Link href="/auth/login" className="underline">
                                     Sign in
                                 </Link>
                             </div>

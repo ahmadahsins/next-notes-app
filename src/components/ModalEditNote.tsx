@@ -87,8 +87,7 @@ const ModalEditNote = (props: PropType) => {
                             control={form.control}
                             name="title"
                             render={({ field }) => (
-                                <FormItem className="grid grid-cols-4 items-center gap-4">
-                                    <FormLabel>Title</FormLabel>
+                                <FormItem className="flex-col items-center gap-4 w-full">
                                     <FormControl>
                                         <Input
                                             defaultValue={note?.title}
@@ -104,12 +103,11 @@ const ModalEditNote = (props: PropType) => {
                             control={form.control}
                             name="note"
                             render={({ field }) => (
-                                <FormItem className="grid grid-cols-4 items-center gap-4">
-                                    <FormLabel>Note</FormLabel>
+                                <FormItem className="flex-col items-center gap-4">
                                     <FormControl>
                                         <Textarea
                                             defaultValue={note?.note}
-                                            className="col-span-3"
+                                            className="col-span-3 min-h-[50vh]"
                                             {...field}
                                         />
                                     </FormControl>

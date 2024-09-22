@@ -45,6 +45,7 @@ const CreatePage = () => {
             notes: [
                 ...notes,
                 {
+                    id: `${Date.now()}-${Math.random().toString(16)}`,
                     title: values.title,
                     note: values.note,
                 },
@@ -55,7 +56,7 @@ const CreatePage = () => {
             const res = await instance.put("/api/note", { data });
             if (res.status === 200) {
                 form.reset();
-                push("/");
+                push("/notes");
             }
         } catch (error) {
             console.log(error);
@@ -63,7 +64,7 @@ const CreatePage = () => {
     });
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center">
+        <div className="flex min-h-screen flex-col items-center justify-center mx-5">
             <Form {...form}>
                 <form
                     onSubmit={onSubmit}
@@ -91,6 +92,7 @@ const CreatePage = () => {
                                 <FormControl>
                                     <Textarea
                                         placeholder="Note something..."
+                                        className="min-h-[30vh]"
                                         {...field}
                                     />
                                 </FormControl>

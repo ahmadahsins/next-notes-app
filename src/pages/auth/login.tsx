@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const schema = z.object({
     email: z.string().email("Invalid email"),
@@ -67,14 +68,15 @@ const LoginPage = () => {
     });
 
     return (
-        <div className="flex min-h-screen items-center justify-center">
+        <div className="flex min-h-screen items-center justify-center mx-5">
             <Form {...form}>
                 <form onSubmit={onSubmit} className="w-full max-w-lg">
                     <Card className="w-full">
                         <CardHeader>
                             <CardTitle className="text-2xl">Login</CardTitle>
                             <CardDescription>
-                                Enter your email below to login to your account.
+                                Enter your email and your password below to
+                                login to your account.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="grid gap-4">
@@ -121,12 +123,23 @@ const LoginPage = () => {
                                     "Sign In"
                                 )}
                             </Button>
-                            <Button onClick={() =>
-                                signIn("google", {
-                                    callbackUrl,
-                                    redirect: false,
-                                })
-                            } variant="secondary" className="w-full">
+                            <Button
+                                onClick={() =>
+                                    signIn("google", {
+                                        callbackUrl,
+                                        redirect: false,
+                                    })
+                                }
+                                variant="secondary"
+                                className="w-full"
+                            >
+                                <Image
+                                    src="/google.png"
+                                    width={16}
+                                    height={16}
+                                    alt="google"
+                                    className="mr-1.5"
+                                />
                                 Login with Google
                             </Button>
                             <div className="text-center text-sm">

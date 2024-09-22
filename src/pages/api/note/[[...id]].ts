@@ -1,7 +1,4 @@
-import {
-    retrieveDataById,
-    updateData,
-} from "@/lib/firebase/service";
+import { retrieveDataById, updateData } from "@/lib/firebase/service";
 import type { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 
@@ -21,8 +18,15 @@ export default async function handler(
                             "users",
                             decoded.id
                         );
+
                         if (user) {
                             user.id = decoded.id;
+                            const { id }: any = req.query;
+                            if (id && id[0]) {
+                                user.notes = user.notes.find(
+                                    (note: any) => note.id === id[0]
+                                );
+                            }
                             res.status(200).json({
                                 status: true,
                                 statusCode: 200,
@@ -49,7 +53,24 @@ export default async function handler(
                 process.env.NEXTAUTH_SECRET || "",
                 async (err: any, decoded: any) => {
                     if (decoded) {
-                        const { data } = req.body;
+                        const user: any = await retrieveDataById(
+                            "users",
+                            decoded.id
+                        );
+                        let { data } = req.body;
+                        const { id }: any = req.query;
+
+                        if (id && id[0]) {
+                            user.notes = user.notes.map((note: any) => {
+                                if (note.id === id[0]) {
+                                    return data;
+                                } else {
+                                    return note;
+                                }
+                            });
+                            data = { notes: user.notes };
+                        }
+
                         await updateData(
                             "users",
                             decoded.id,
